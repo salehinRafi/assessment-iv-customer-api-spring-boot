@@ -10,10 +10,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CardTests {
 
     @Test
-    void givenNewCard_whenCreated_thenStatusIsActive() {
+    void givenNewCard_whenCreated_thenStatusIsInactive() {
         Card card = new Card();
 
-        assertThat(card.getStatus()).isEqualTo(CardEnums.Status.ACTIVE);
+        assertThat(card.getStatus()).isEqualTo(CardEnums.Status.INACTIVE);
     }
 
     @Test
