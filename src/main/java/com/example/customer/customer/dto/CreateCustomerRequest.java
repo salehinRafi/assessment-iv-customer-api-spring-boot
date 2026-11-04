@@ -1,6 +1,9 @@
 package com.example.customer.customer.dto;
 
+import com.example.customer.card.entity.CardEnums;
 import com.example.customer.customer.entity.IdentityType;
+
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -12,6 +15,7 @@ public record CreateCustomerRequest(
         String name,
 
         @NotBlank
+		@Email
         @Size(max = 255)
         String email,
 
@@ -30,8 +34,20 @@ public record CreateCustomerRequest(
         @NotNull
         IdentityType identityType,
 
-        @NotBlank
-        @Pattern(regexp = "[A-Za-z0-9-]{1,64}", message = "must contain 1-64 digit or letters")
-        String identityNumber
+		@NotBlank
+		@Pattern(regexp = "[A-Za-z0-9-]{1,64}", message = "must contain 1-64 digit or letters")
+		String identityNumber,
+
+		@NotBlank
+		@Size(max = 20)
+		String accountType,
+
+		@NotNull
+		CardEnums.Type cardType
 ) {
+
+	@Override
+	public String toString() {
+		return "CreateCustomerRequest";
+	}
 }
