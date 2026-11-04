@@ -1,5 +1,6 @@
 package com.example.customer.customer.dto;
 
+import com.example.customer.card.entity.CardEnums;
 import com.example.customer.customer.entity.IdentityType;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -23,7 +24,9 @@ class CustomerRequestTest {
                 "Mantin",
                 "MY",
                 IdentityType.NRIC,
-                "01234567891011"
+                "01234567891011",
+                "SAVINGS",
+                CardEnums.Type.DEBIT
         );
     }
 
