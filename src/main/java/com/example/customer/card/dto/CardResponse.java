@@ -1,6 +1,6 @@
 package com.example.customer.card.dto;
 
-import com.example.customer.card.entity.CardStatus;
+import com.example.customer.card.entity.CardEnums;
 
 import java.time.LocalDateTime;
 
@@ -8,10 +8,10 @@ public record CardResponse(
         Long id,
         Long accountId,
         String cardNumber,
-        String cardType,
+        CardEnums.Type cardType,
         Integer expiryMonth,
         Integer expiryYear,
-        CardStatus status,
+        CardEnums.Status status,
         LocalDateTime createAt,
         LocalDateTime updateAt
 ) {
