@@ -40,12 +40,12 @@ databaseChangeLog:
                   type: varchar(2)
 
               - column:
-                  name: identity_type
+                  name: id_type
                   type: varchar(10)
 
               - column:
-                  name: identity_number
-                  type: varchar(512)
+                  name: id_number
+                  type: varchar(20)
 
               - column:
                   name: created_at
@@ -91,22 +91,16 @@ databaseChangeLog:
                     nullable: false
 
               - column:
-                  name: account_reference
+                  name: account_number
                   type: varchar(50)
                   constraints:
                     nullable: false
                     unique: true
-                    uniqueConstraintName: uq_account_reference
+                    uniqueConstraintName: uq_account_number
 
               - column:
                   name: account_type
                   type: varchar(20)
-                  constraints:
-                    nullable: false
-
-              - column:
-                  name: currency
-                  type: varchar(3)
                   constraints:
                     nullable: false
 
@@ -161,16 +155,8 @@ databaseChangeLog:
                     nullable: false
 
               - column:
-                  name: card_reference
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-                    unique: true
-                    uniqueConstraintName: uq_card_reference
-
-              - column:
                   name: card_number
-                  type: varchar(19)
+                  type: varchar(20)
                   constraints:
                     nullable: false
                     unique: true
@@ -190,13 +176,13 @@ databaseChangeLog:
 
               - column:
                   name: expiry_month
-                  type: smallint
+                  type: int
                   constraints:
                     nullable: false
 
               - column:
                   name: expiry_year
-                  type: smallint
+                  type: int
                   constraints:
                     nullable: false
 
@@ -264,11 +250,11 @@ databaseChangeLog:
         - sql:
             dbms: mssql
             sql: |
-              ALTER TABLE [customer] ADD CONSTRAINT ck_customer_identity_type
-                CHECK (identity_type IS NULL OR identity_type IN ('NRIC', 'PASSPORT'));
+              ALTER TABLE [customer] ADD CONSTRAINT ck_customer_id_type
+                CHECK (id_type IS NULL OR id_type IN ('NRIC', 'PASSPORT'));
               ALTER TABLE [customer] ADD CONSTRAINT ck_customer_identity_pair
-                CHECK ((identity_type IS NULL AND identity_number IS NULL)
-                  OR (identity_type IS NOT NULL AND identity_number IS NOT NULL));
+                CHECK ((id_type IS NULL AND id_number IS NULL)
+                  OR (id_type IS NOT NULL AND id_number IS NOT NULL));
               ALTER TABLE [card] ADD CONSTRAINT ck_card_number
                 CHECK (DATALENGTH(card_number) BETWEEN 13 AND 19
                   AND card_number COLLATE Latin1_General_100_BIN2 NOT LIKE '%[^0-9]%');
