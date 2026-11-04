@@ -12,8 +12,8 @@ public record CardResponse(
         Integer expiryMonth,
         Integer expiryYear,
         CardEnums.Status status,
-        LocalDateTime createAt,
-        LocalDateTime updateAt
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
 
     @Override

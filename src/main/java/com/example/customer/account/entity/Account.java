@@ -47,8 +47,8 @@ public class Account {
     @Setter(AccessLevel.NONE)
     private LocalDateTime updatedAt;
 
-    @Column(name = "updated_by", nullable = false, updatable = false, length = 100)
-    private String updatedBy;
+	@Column(name = "updated_by", nullable = false, length = 100)
+	private String updatedBy;
 
     @PrePersist
     void onCreate() {

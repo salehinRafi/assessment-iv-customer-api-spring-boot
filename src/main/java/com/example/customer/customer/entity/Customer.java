@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -37,8 +36,9 @@ public class Customer {
     @Column(name = "country", length = 2)
     private String country;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "id_type", length = 10)
-    private String identityType;
+    private IdentityType identityType;
 
     @Column(name = "id_number", nullable = false, length = 20)
     private String identityNumber;
@@ -55,7 +55,7 @@ public class Customer {
     @Setter(AccessLevel.NONE)
     private LocalDateTime updatedAt;
 
-    @Column(name = "updated_by", nullable = false, updatable = false, length = 100)
+    @Column(name = "updated_by", nullable = false, length = 100)
     private String updatedBy;
 
     @PrePersist
