@@ -1,14 +1,12 @@
 package com.example.customer.card.entity;
 
 import com.example.customer.account.entity.Account;
-import com.example.customer.customer.entity.Customer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -34,9 +32,9 @@ public class Card {
     @Column(name = "cvv", nullable = false, length = 4)
     private String cvv;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "card_type", nullable = false, length = 20)
-    private String cardType ;
-
+    private CardEnums.Type cardType;
 
     @Column(name = "expiry_month", nullable = false)
     private Integer expiryMonth;
@@ -46,7 +44,7 @@ public class Card {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private CardStatus status = CardStatus.ACTIVE;
+    private CardEnums.Status status = CardEnums.Status.INACTIVE;
 
     @Column(name = "created_at", nullable = false, updatable = false,columnDefinition = "datetime2(6)")
     @Setter(AccessLevel.NONE)

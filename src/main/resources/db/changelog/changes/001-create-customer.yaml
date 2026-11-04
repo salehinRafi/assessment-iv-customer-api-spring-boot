@@ -189,7 +189,7 @@ databaseChangeLog:
               - column:
                   name: status
                   type: varchar(20)
-                  defaultValue: ACTIVE
+                  defaultValue: INACTIVE
                   constraints:
                     nullable: false
 

@@ -7,7 +7,7 @@ import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CustomerTests {
+class CustomerTests {
 
     @Test
     void givenNewCustomer_whenSaved_thenTimestampsAreSet(){

@@ -1,20 +1,19 @@
 package com.example.customer.card.entity;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CardTests {
+class CardTests {
 
     @Test
     void givenNewCard_whenCreated_thenStatusIsActive() {
         Card card = new Card();
 
-        assertThat(card.getStatus()).isEqualTo(CardStatus.ACTIVE);
+        assertThat(card.getStatus()).isEqualTo(CardEnums.Status.ACTIVE);
     }
 
     @Test

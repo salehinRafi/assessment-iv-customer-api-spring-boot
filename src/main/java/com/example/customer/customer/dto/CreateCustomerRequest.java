@@ -24,14 +24,14 @@ public record CreateCustomerRequest(
         String address,
 
         @NotBlank
-        @Pattern(regexp = "[A-Z{2}]", message = "must be a 2 letter uppercase country")
+        @Pattern(regexp = "[A-Z]{2}", message = "must be a 2 letter uppercase country")
         String country,
 
         @NotNull
         IdentityType identityType,
 
         @NotBlank
-        @Pattern(regexp = "[A-Za-z0-9-]{1,64}]", message = "must contain 1-64 digit or letters")
+        @Pattern(regexp = "[A-Za-z0-9-]{1,64}", message = "must contain 1-64 digit or letters")
         String identityNumber
 ) {
 }

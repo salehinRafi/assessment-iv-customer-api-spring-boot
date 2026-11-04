@@ -8,7 +8,7 @@ import java.time.ZoneOffset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AccountTests {
+class AccountTests {
 
     @Test
     void givenNewAccount_whenCreated_thenBalanceIsDefault(){
