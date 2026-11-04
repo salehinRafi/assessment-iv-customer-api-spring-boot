@@ -1,6 +1,7 @@
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: local-mssql
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_PID: Developer
@@ -10,5 +11,16 @@ services:
     volumes:
       - sqlserver-data:/var/opt/mssql
 
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:26.2.4
+    container_name: local-cloudbeaver
+    depends_on:
+      - sqlserver
+    ports:
+      - 127.0.0.1:8978:8978
+    volumes:
+      - cloudbeaver-data:/opt/cloudbeaver/workspace
+
 volumes:
   sqlserver-data:
+  cloudbeaver-data:

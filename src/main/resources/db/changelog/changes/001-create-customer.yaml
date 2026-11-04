@@ -1,0 +1,283 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-customer
+      author: training
+      contextFilter: "@dev"
+      changes:
+        - createTable:
+            tableName: customer
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: name
+                  type: nvarchar(150)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: phone
+                  type: varchar(30)
+
+              - column:
+                  name: address
+                  type: nvarchar(500)
+
+              - column:
+                  name: country
+                  type: varchar(2)
+
+              - column:
+                  name: identity_type
+                  type: varchar(10)
+
+              - column:
+                  name: identity_number
+                  type: varchar(512)
+
+              - column:
+                  name: created_at
+                  type: datetime2(6)
+                  defaultValueComputed: SYSUTCDATETIME()
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_by
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
+                  type: datetime2(6)
+                  defaultValueComputed: SYSUTCDATETIME()
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_by
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: account
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: customer_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: account_reference
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uq_account_reference
+
+              - column:
+                  name: account_type
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: currency
+                  type: varchar(3)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: balance
+                  type: decimal(19,2)
+                  defaultValueNumeric: 0.00
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: datetime2(6)
+                  defaultValueComputed: SYSUTCDATETIME()
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_by
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
+                  type: datetime2(6)
+                  defaultValueComputed: SYSUTCDATETIME()
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_by
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: card
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: account_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: card_reference
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uq_card_reference
+
+              - column:
+                  name: card_number
+                  type: varchar(19)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uq_card_number
+
+              - column:
+                  name: cvv
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: card_type
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: expiry_month
+                  type: smallint
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: expiry_year
+                  type: smallint
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: status
+                  type: varchar(20)
+                  defaultValue: ACTIVE
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: datetime2(6)
+                  defaultValueComputed: SYSUTCDATETIME()
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_by
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
+                  type: datetime2(6)
+                  defaultValueComputed: SYSUTCDATETIME()
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_by
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: account
+            baseColumnNames: customer_id
+            referencedTableName: customer
+            referencedColumnNames: id
+            constraintName: fk_account_customer
+
+        - addForeignKeyConstraint:
+            baseTableName: card
+            baseColumnNames: account_id
+            referencedTableName: account
+            referencedColumnNames: id
+            constraintName: fk_card_account
+
+        - createIndex:
+            tableName: account
+            indexName: ix_account_customer_id
+            columns:
+              - column:
+                  name: customer_id
+
+        - createIndex:
+            tableName: card
+            indexName: ix_card_account_id
+            columns:
+              - column:
+                  name: account_id
+
+        - sql:
+            dbms: mssql
+            sql: |
+              ALTER TABLE [customer] ADD CONSTRAINT ck_customer_identity_type
+                CHECK (identity_type IS NULL OR identity_type IN ('NRIC', 'PASSPORT'));
+              ALTER TABLE [customer] ADD CONSTRAINT ck_customer_identity_pair
+                CHECK ((identity_type IS NULL AND identity_number IS NULL)
+                  OR (identity_type IS NOT NULL AND identity_number IS NOT NULL));
+              ALTER TABLE [card] ADD CONSTRAINT ck_card_number
+                CHECK (DATALENGTH(card_number) BETWEEN 13 AND 19
+                  AND card_number COLLATE Latin1_General_100_BIN2 NOT LIKE '%[^0-9]%');
+              ALTER TABLE [card] ADD CONSTRAINT ck_card_cvv
+                CHECK (DATALENGTH(cvv) IN (3, 4)
+                  AND cvv COLLATE Latin1_General_100_BIN2 NOT LIKE '%[^0-9]%');
+              ALTER TABLE [card] ADD CONSTRAINT ck_card_expiry_month
+                CHECK (expiry_month BETWEEN 1 AND 12);
+              ALTER TABLE [card] ADD CONSTRAINT ck_card_expiry_year
+                CHECK (expiry_year BETWEEN 2000 AND 9999);
+              ALTER TABLE [card] ADD CONSTRAINT ck_card_status
+                CHECK (status COLLATE Latin1_General_100_BIN2 IN ('ACTIVE', 'INACTIVE'));
