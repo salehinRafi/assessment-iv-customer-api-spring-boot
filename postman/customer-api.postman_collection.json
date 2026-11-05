@@ -1,0 +1,83 @@
+{
+  "info": {
+    "name": "Assignment assessment",
+    "description": "All requests inherit collection Bearer Token authorization using {{apiToken}}. Set apiToken to app.security.api-token from src/main/resources/application.properties, without the Bearer prefix.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{apiToken}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    {
+      "key": "apiToken",
+      "value": "test-token",
+      "description": "Match app.security.api-token in application.properties. Enter the token only, without the Bearer prefix."
+    },
+    { "key": "customerId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Create customer with account and card",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const suffix = String(Date.now());",
+              "pm.variables.set('newEmail', 'customer.' + suffix + '@example.com');",
+              "pm.variables.set('identityNumber', suffix.slice(-12));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"API Customer\",\n  \"email\": \"{{newEmail}}\",\n  \"phone\": \"0100000001\",\n  \"address\": \"1 Example Street\",\n  \"country\": \"MY\",\n  \"identityType\": \"NRIC\",\n  \"identityNumber\": \"{{identityNumber}}\",\n  \"accountType\": \"SAVINGS\",\n  \"cardType\": \"DEBIT\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/api/customers"
+      }
+    },
+    {
+      "name": "Update customer contact",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"0199999999\",\n  \"address\": \"2 Example Street\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/api/customers/{{customerId}}/contact"
+      }
+    },
+    {
+      "name": "List customers",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/customers?page=0"
+      }
+    },
+    {
+      "name": "Get third-party post",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/external/posts/1"
+      }
+    }
+  ]
+}
